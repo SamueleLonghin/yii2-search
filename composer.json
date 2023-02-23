@@ -19,7 +19,7 @@
   ],
   "require": {
     "yiisoft/yii2": "~2.0.0",
-    "samuelelonghin/yii2-activerecord": "~dev-main"
+    "samuelelonghin/yii2-activerecord": "dev-main"
   },
   "autoload": {
     "psr-4": {
