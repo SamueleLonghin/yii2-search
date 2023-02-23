@@ -44,24 +44,18 @@ trait SearchTrait
     /**
 	 * @param $query
 	 * @param null $baseActiveQuery
-	 * @return InstallationQuery|null
+	 * @return ActiveQuery|null
 	 */
-	public function fromQuery($query, $baseActiveQuery = null): ?InstallationQuery
+	public function fromQuery($query, $baseActiveQuery = null): ?ActiveQuery
 	{
-		$this->initBaseQuery($baseActiveQuery);
+        $this->initBaseQuery($baseActiveQuery);
 
-		$filters = ['or',
-			['like', 'name', $query],
-			$this->filterAddress($query),
-		];
+        $filters = $this->or_filters;
 
-		if ($this->recursive) {
-			$businessSearch = new QuerySearchModel(['query' => $query, 'filterModel' => new BusinessSearch()]);
-			$filters[] = ['in', 'idInstallation', InstallationHasBusinessHasProfession::find()->select('idInstallation')->where(['idBusiness' => $businessSearch->generateSQL()->select('idBusiness')])];
-		}
+        $filters = array_merge($filters, $this->getRecursiveModels());
 
-		return $baseActiveQuery->andFilterWhere($filters);
-	}
+        return $baseActiveQuery->andFilterWhere($filters);
+    }
     
 
 	public function generateSQL($params = null, $baseActiveQuery = null): ?ActiveQuery
